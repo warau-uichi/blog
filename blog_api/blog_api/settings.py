@@ -1,8 +1,9 @@
+import os
 from datetime import timedelta
-
 from pathlib import Path
+
 from decouple import config
-from dj_database_url import parse
+import dj_database_url
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -12,10 +13,12 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/4.2/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = config('SECRET_KEY')
+# SECRET_KEY = config('SECRET_KEY')
+SECRET_KEY = os.environ.get('SECRET_KEY', default='local_secret_here')
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = config('DEBUG')
+# DEBUG = config('DEBUG')
+DEBUG = 'RENDER' not in os.environ
 
 ALLOWED_HOSTS = []
 
@@ -90,9 +93,12 @@ WSGI_APPLICATION = 'blog_api.wsgi.application'
 
 DEFAULT_DB_URL = f'sqlite:///{BASE_DIR}/db.sqlite3'
 
-DATABASES = {
-    'default': config('DATABASE_URL', default=DEFAULT_DB_URL, cast=parse),
-}
+if DEBUG:
+    DATABASES = {
+        'default': config('DATABASE_URL', default=DEFAULT_DB_URL, cast=dj_database_url.parse),
+    }
+else:
+    DATABASES = {"default": dj_database_url.config()}
 
 
 # Password validation
@@ -130,6 +136,7 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/4.2/howto/static-files/
 
 STATIC_URL = 'static/'
+STATIC_ROOT = str(BASE_DIR / 'staticfiles')
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/4.2/ref/settings/#default-auto-field
