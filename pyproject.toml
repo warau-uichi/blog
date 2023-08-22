@@ -1,0 +1,21 @@
+[tool.poetry]
+name = "blog"
+version = "0.1.0"
+description = ""
+authors = ["Yosuke Ikei <warau.uichi@gmail.com>"]
+readme = "README.md"
+
+[tool.poetry.dependencies]
+python = "^3.8"
+django = "^4.2.4"
+djangorestframework = "^3.14.0"
+django-cors-headers = "^4.2.0"
+djangorestframework-simplejwt = "^5.2.2"
+djoser = "^2.2.0"
+python-decouple = "^3.8"
+dj-database-url = "^2.1.0"
+
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
